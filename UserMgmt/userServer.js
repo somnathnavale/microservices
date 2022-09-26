@@ -10,10 +10,13 @@ connectDB(process.env.MONGO_URI);
 
 //middlewares
 //parsing the data 
+app.use(cors({origin:'http://localhost:3000',credentials:true}));
+
 app.use(express.json());
 app.use(cookieParser());
+
+
 //allowing access from different origin 
-app.use(cors());
 
 //routes
 //users routes 

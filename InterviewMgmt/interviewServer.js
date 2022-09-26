@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 //allowing access from different origin 
-app.use(cors()); 
+app.use(cors({origin:'http://localhost:3000',credentials:true}));
 
 //interview mgmt routes
 app.use('/interview-management',require('./routes/interviewManagementRoutes'))

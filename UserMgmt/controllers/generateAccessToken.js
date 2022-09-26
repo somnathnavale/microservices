@@ -2,10 +2,10 @@ const jwt=require('jsonwebtoken');
 const User=require('../models/userSchema');
 
 const refresh = (req, res) => {
-    const cookies = req.cookies
+    const cookies = req.cookies;
     if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
     const refreshToken = cookies.jwt
-
+    console.log(cookies);
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,

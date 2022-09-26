@@ -97,7 +97,7 @@ const login=async(req,res)=>{
             return res.status(400).json({success:false,data:"no user found with given credentials"});
         const match=await bcrypt.compare(password,user.password);
         if(!match)
-            return res.status(401).json({success:false,data:"please provide valid credentials"});
+            return res.status(400).json({success:false,data:"please provide valid credentials"});
         const accessToken=jwt.sign(
             {
                 "userName":userName,
@@ -118,7 +118,7 @@ const login=async(req,res)=>{
             sameSite: 'None', //cross-site cookie 
             maxAge: 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
         })
-        res.status(200).json({sucess:true,role:user.role,accessToken});
+        res.status(200).json({success:true,role:user.role,accessToken});
     }catch(err){
         console.log(err.message);
         res.status(400).json({success:false,data:err.message});
@@ -132,6 +132,50 @@ const logOut=async(req,res)=>{
     res.json({ sucess:true,message: 'Cookie cleared' })
 }
 
+
+const editPanelMeber=async (req,res)=>{
+
+    if(req.user.role!=="admin")
+
+        return(res.status(401).json({success:false,data:"Unauthorize Access"}));
+
+        const updates = Object.keys(req.body);
+
+    try {
+
+        const user = await User.findOne({
+
+            _id: req.params.id,
+
+        });
+
+        if(!user) {
+
+            return res.status(404).json({
+
+                success:false,
+
+                data:"No panel With given id"
+
+            });
+
+        }
+
+        updates.forEach((update) => user[update] = req.body[update]);
+
+        const updatedUser=await user.save();
+
+        res.status(200).json({success:true,user:updatedUser});
+
+    } catch (e) {
+
+        res.status(400).json({success:false,data:e.message});
+
+    }
+
+}
+
+
 module.exports = {
     registerPanel,
     getUser,
@@ -139,5 +183,6 @@ module.exports = {
     login,
     logOut,
     listAllPanelMember,
-    searchEmployee
+    searchEmployee,
+    editPanelMeber
 }

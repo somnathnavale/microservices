@@ -38,11 +38,31 @@ const getAllCandidate = async (req, res) => {
     }
 }
 
+const editCandidate=async (req,res)=>{
+    if(req.user.role!=="admin"){
+        return(res.status(401).json({success:false,data:"Unauthorize Access"}));}
+    const updates = Object.keys(req.body);
+    try {
+        const candidate = await Candidate.findOne({_id: req.params.id});
+        if(!candidate) {
+            return res.status(404).json({
+                success:false,
+                data:"No panel With given id"
+            });
+        }
+        updates.forEach((update) => candidate[update] = req.body[update]);
+        const updatedCandidate=await candidate.save();
+        res.status(200).json({success:true,candidate:updatedCandidate});
+    } catch (e) {
+        res.status(400).json({success:false,data:e.message});
+    }
+}
 
 module.exports = {
     addCandidate,
     viewCandidate,
-    getAllCandidate
+    getAllCandidate,
+    editCandidate
 }
 
 //use below format for every response
