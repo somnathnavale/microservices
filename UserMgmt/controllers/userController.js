@@ -134,45 +134,25 @@ const logOut=async(req,res)=>{
 
 
 const editPanelMeber=async (req,res)=>{
-
     if(req.user.role!=="admin")
-
         return(res.status(401).json({success:false,data:"Unauthorize Access"}));
-
-        const updates = Object.keys(req.body);
-
+    const updates = Object.keys(req.body);
     try {
-
         const user = await User.findOne({
-
             _id: req.params.id,
-
         });
-
         if(!user) {
-
             return res.status(404).json({
-
                 success:false,
-
                 data:"No panel With given id"
-
             });
-
         }
-
         updates.forEach((update) => user[update] = req.body[update]);
-
         const updatedUser=await user.save();
-
         res.status(200).json({success:true,user:updatedUser});
-
     } catch (e) {
-
         res.status(400).json({success:false,data:e.message});
-
     }
-
 }
 
 

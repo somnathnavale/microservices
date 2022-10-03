@@ -19,19 +19,44 @@ const getAllInterviews=async(req,res)=>{
     try {
         if(req.user.role==='admin'){
             const interviews=await Interview.find({});
-            return res.status(200).json({ success: true, data: interviews });
+            const updatedInterview=[];
+            axios.defaults.headers.common = {'Authorization': `Bearer ${req.user.token}`}
+            for(let interview of interviews){
+                const response=await axios.get(`http://localhost:5002/interview-management/candidate/${interview.candidateId}`);
+                const candidate=response.data.data;
+                updatedInterview.push({...interview._doc,name:candidate.name});
+            }
+            return res.status(200).json({ success: true, data: updatedInterview });
         }else if(req.user.role==='tech'){
             axios.defaults.headers.common = {'Authorization': `Bearer ${req.user.token}`}
             const response=await axios.get(`http://localhost:5001/user`);
             const user=response.data.data;
             const interviews= await Interview.find({techId:user._id})
-            return res.status(200).json({ success: true, data: interviews });
+
+            const updatedInterview=[];
+            axios.defaults.headers.common = {'Authorization': `Bearer ${req.user.token}`}
+            for(let interview of interviews){
+                const response=await axios.get(`http://localhost:5002/interview-management/candidate/${interview.candidateId}`);
+                const candidate=response.data.data;
+                updatedInterview.push({...interview._doc,name:candidate.name});
+            }
+            return res.status(200).json({ success: true, data: updatedInterview });
+            // return res.status(200).json({ success: true, data: interviews });
         }else{
             axios.defaults.headers.common = {'Authorization': `Bearer ${req.user.token}`}
             const response=await axios.get(`http://localhost:5001/user`);
             const user=response.data.data;
             const interviews= await Interview.find({hrId:user._id})
-            res.status(200).json({ success: true, data: interviews });
+
+            const updatedInterview=[];
+            axios.defaults.headers.common = {'Authorization': `Bearer ${req.user.token}`}
+            for(let interview of interviews){
+                const response=await axios.get(`http://localhost:5002/interview-management/candidate/${interview.candidateId}`);
+                const candidate=response.data.data;
+                updatedInterview.push({...interview._doc,name:candidate.name});
+            }
+            return res.status(200).json({ success: true, data: updatedInterview });
+            // res.status(200).json({ success: true, data: interviews });
         }
     }
     catch (error) {

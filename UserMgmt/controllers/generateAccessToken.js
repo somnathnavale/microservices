@@ -5,7 +5,6 @@ const refresh = (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
     const refreshToken = cookies.jwt
-    console.log(cookies);
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
@@ -22,7 +21,7 @@ const refresh = (req, res) => {
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '1h' }
                 )
-                res.status(200).json({ accessToken })
+                res.status(200).json({ accessToken,role:foundUser.role })
             } catch (err) {
                 console.log(err.message);
                 res.status(400).json({success:false,data:err.message});
