@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(cors({origin:'http://localhost:3000',credentials:true}));
 
 //interview mgmt routes
-app.use('/interview-management',require('./routes/interviewManagementRoutes'))
+app.use('/interview',require('./routes/interviewManagementRoutes'))
 
 mongoose.connection.once('open',()=>{
     app.listen(process.env.PORT,console.log("Listening..."));

@@ -64,15 +64,3 @@ module.exports = {
     getAllCandidate,
     editCandidate
 }
-
-//use below format for every response
-
-// res.status(statusCode).json({sucess:true/false,data:data})
-//statusCode- go through http status code
-//200- for successfully reading, updating, deleted
-//201- for successfully creating
-//401- unauthorised access
-//403- forbidden access
-//500- internal server error
-//404- resource not found
-//400- bad request
